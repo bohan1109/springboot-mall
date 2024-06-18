@@ -2,6 +2,7 @@ package com.hank.springbootmalll.service.implement;
 
 import com.hank.springbootmalll.constant.ProductCategory;
 import com.hank.springbootmalll.dto.ProductDto;
+import com.hank.springbootmalll.exception.ProductNotFoundException;
 import com.hank.springbootmalll.model.Product;
 import com.hank.springbootmalll.repository.ProductRepository;
 import com.hank.springbootmalll.service.ProductService;
@@ -38,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product updateProduct(Long id, ProductDto productDto) {
-        Product product = productRepository.findById(id).orElse(null);
+        Product product = productRepository.findById(id).orElseThrow(()->new ProductNotFoundException("Product not found with id: " + id));
 
         if (product != null) {
             updateEntityFromDto(product, productDto);
