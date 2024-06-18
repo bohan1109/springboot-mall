@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -29,15 +30,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product createProduct(ProductDto productDto) {
         Product product = new Product();
-        product.setProductName(productDto.getProductName());
-//        String categoryStr = productDto.getCategory();
-//        ProductCategory productCategory = ProductCategory.valueOf(categoryStr);
-//        product.setCategory(productCategory);
-        product.setCategory(ProductCategory.valueOf(productDto.getCategory()));
-        product.setImageUrl(productDto.getImageUrl());
-        product.setPrice(productDto.getPrice());
-        product.setStock(productDto.getStock());
-        product.setDescription(productDto.getDescription());
+        updateEntityFromDto(product, productDto);
         product.setCreatedDate(new Date());
         product.setLastModifiedDate(new Date());
         return productRepository.save(product);
@@ -48,15 +41,22 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(id).orElse(null);
 
         if (product != null) {
-            product.setProductName(productDto.getProductName());
-            product.setCategory(ProductCategory.valueOf(productDto.getCategory()));
-            product.setImageUrl(productDto.getImageUrl());
-            product.setPrice(productDto.getPrice());
-            product.setStock(productDto.getStock());
-            product.setDescription(productDto.getDescription());
+            updateEntityFromDto(product, productDto);
             product.setLastModifiedDate(new Date());
             return productRepository.save(product);
         }
         return null;
+    }
+
+    private void updateEntityFromDto(Product product, ProductDto productDto) {
+        product.setProductName(productDto.getProductName());
+//        String categoryStr = productDto.getCategory();
+//        ProductCategory productCategory = ProductCategory.valueOf(categoryStr);
+//        product.setCategory(productCategory);
+        product.setCategory(ProductCategory.valueOf(productDto.getCategory())); // Assuming valid enum value
+        product.setImageUrl(productDto.getImageUrl());
+        product.setPrice(productDto.getPrice());
+        product.setStock(productDto.getStock());
+        product.setDescription(productDto.getDescription());
     }
 }
