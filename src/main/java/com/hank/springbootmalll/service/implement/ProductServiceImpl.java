@@ -51,6 +51,14 @@ public class ProductServiceImpl implements ProductService {
         return null;
     }
 
+    @Override
+    public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException("Product not found with id: " + id);
+        }
+        productRepository.deleteById(id);
+    }
+
     private void updateEntityFromDto(Product product, ProductDto productDto) {
         product.setProductName(productDto.getProductName());
 //        String categoryStr = productDto.getCategory();
