@@ -1,5 +1,6 @@
 package com.hank.springbootmalll.model;
 
+import com.hank.springbootmalll.constant.ProductCategory;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,7 +15,8 @@ public class Product {
     private Integer productId;
 
     private String productName;
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private ProductCategory category;
     private String imageUrl;
     private Integer price;
     private Integer stock;
