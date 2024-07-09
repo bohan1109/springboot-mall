@@ -5,6 +5,7 @@ import com.hank.springbootmalll.dto.ProductDto;
 import com.hank.springbootmalll.exception.ProductNotFoundException;
 import com.hank.springbootmalll.model.Product;
 import com.hank.springbootmalll.repository.ProductRepository;
+import com.hank.springbootmalll.repository.specification.ProductSpecifications;
 import com.hank.springbootmalll.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<Product> getAllProducts(ProductCategory category,String productName) {
+        return productRepository.findAll(ProductSpecifications.withDynamicQuery(productName, category));
     }
 
     @Override

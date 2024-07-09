@@ -1,5 +1,6 @@
 package com.hank.springbootmalll.controller;
 
+import com.hank.springbootmalll.constant.ProductCategory;
 import com.hank.springbootmalll.dto.ProductDto;
 import com.hank.springbootmalll.model.Product;
 import com.hank.springbootmalll.service.ProductService;
@@ -18,8 +19,11 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-         List<Product> productList= productService.getAllProducts();
+    public ResponseEntity<List<Product>> getAllProducts(
+            @RequestParam(required = false) ProductCategory category,
+            @RequestParam(required=false) String productName
+    ) {
+         List<Product> productList= productService.getAllProducts(category,productName);
             return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
 
