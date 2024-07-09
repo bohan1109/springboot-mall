@@ -20,11 +20,7 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
          List<Product> productList= productService.getAllProducts();
-        if(!productList.isEmpty()){
             return ResponseEntity.status(HttpStatus.OK).body(productList);
-        }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(productList);
-        }
     }
 
     @GetMapping("/{id}")
