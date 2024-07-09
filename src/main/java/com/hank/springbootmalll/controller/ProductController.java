@@ -2,6 +2,7 @@ package com.hank.springbootmalll.controller;
 
 import com.hank.springbootmalll.constant.ProductCategory;
 import com.hank.springbootmalll.dto.ProductDto;
+import com.hank.springbootmalll.dto.ProductQueryParams;
 import com.hank.springbootmalll.model.Product;
 import com.hank.springbootmalll.service.ProductService;
 import jakarta.validation.Valid;
@@ -23,7 +24,10 @@ public class ProductController {
             @RequestParam(required = false) ProductCategory category,
             @RequestParam(required=false) String productName
     ) {
-         List<Product> productList= productService.getAllProducts(category,productName);
+        ProductQueryParams productQueryParams = new ProductQueryParams();
+        productQueryParams.setCategory(category);
+        productQueryParams.setProductName(productName);
+         List<Product> productList= productService.getAllProducts(productQueryParams);
             return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
 

@@ -2,6 +2,7 @@ package com.hank.springbootmalll.service.implement;
 
 import com.hank.springbootmalll.constant.ProductCategory;
 import com.hank.springbootmalll.dto.ProductDto;
+import com.hank.springbootmalll.dto.ProductQueryParams;
 import com.hank.springbootmalll.exception.ProductNotFoundException;
 import com.hank.springbootmalll.model.Product;
 import com.hank.springbootmalll.repository.ProductRepository;
@@ -20,8 +21,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Override
-    public List<Product> getAllProducts(ProductCategory category,String productName) {
-        return productRepository.findAll(ProductSpecifications.withDynamicQuery(productName, category));
+    public List<Product> getAllProducts(ProductQueryParams productQueryParams) {
+        return productRepository.findAll(ProductSpecifications.withDynamicQuery(productQueryParams));
     }
 
     @Override

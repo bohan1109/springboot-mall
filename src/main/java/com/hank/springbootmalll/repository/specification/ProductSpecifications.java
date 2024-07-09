@@ -1,6 +1,7 @@
 package com.hank.springbootmalll.repository.specification;
 
-import com.hank.springbootmalll.constant.ProductCategory;
+
+import com.hank.springbootmalll.dto.ProductQueryParams;
 import com.hank.springbootmalll.model.Product;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -12,15 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductSpecifications {
-    public static Specification<Product> withDynamicQuery(String productName, ProductCategory category) {
+    public static Specification<Product> withDynamicQuery(ProductQueryParams productQueryParams) {
         return (Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
-            if (productName != null && !productName.isEmpty()) {
-                predicates.add(criteriaBuilder.like(root.get("productName"), "%" + productName + "%"));
+            if (productQueryParams.getProductName() != null && !productQueryParams.getProductName().isEmpty()) {
+                predicates.add(criteriaBuilder.like(root.get("productName"), "%" + productQueryParams.getProductName() + "%"));
             }
 
-            if (category != null) {
-                predicates.add(criteriaBuilder.equal(root.get("category"), category));
+            if (productQueryParams.getCategory() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("category"), productQueryParams.getCategory()));
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
