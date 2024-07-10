@@ -1,8 +1,8 @@
-package com.hank.springbootmalll.controller;
+package com.hank.springbootmall.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hank.springbootmalll.constant.ProductCategory;
+import com.hank.springbootmall.constant.ProductCategory;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import com.hank.springbootmalll.dto.ProductDto;
+import com.hank.springbootmall.dto.ProductDto;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

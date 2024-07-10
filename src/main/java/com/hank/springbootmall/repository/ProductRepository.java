@@ -1,12 +1,9 @@
-package com.hank.springbootmalll.repository;
+package com.hank.springbootmall.repository;
 
-import com.hank.springbootmalll.constant.ProductCategory;
-import com.hank.springbootmalll.model.Product;
+import com.hank.springbootmall.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 
 @Repository

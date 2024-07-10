@@ -1,21 +1,18 @@
-package com.hank.springbootmalll.service.implement;
+package com.hank.springbootmall.service.implement;
 
-import com.hank.springbootmalll.constant.ProductCategory;
-import com.hank.springbootmalll.dto.ProductDto;
-import com.hank.springbootmalll.dto.ProductQueryParams;
-import com.hank.springbootmalll.exception.ProductNotFoundException;
-import com.hank.springbootmalll.model.Product;
-import com.hank.springbootmalll.repository.ProductRepository;
-import com.hank.springbootmalll.repository.specification.ProductSpecifications;
-import com.hank.springbootmalll.service.ProductService;
+import com.hank.springbootmall.dto.ProductDto;
+import com.hank.springbootmall.dto.ProductQueryParams;
+import com.hank.springbootmall.exception.ProductNotFoundException;
+import com.hank.springbootmall.model.Product;
+import com.hank.springbootmall.repository.ProductRepository;
+import com.hank.springbootmall.repository.specification.ProductSpecifications;
+import com.hank.springbootmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {

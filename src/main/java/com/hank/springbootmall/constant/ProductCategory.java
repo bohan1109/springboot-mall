@@ -1,4 +1,4 @@
-package com.hank.springbootmalll.constant;
+package com.hank.springbootmall.constant;
 
 public enum ProductCategory {
     FOOD,

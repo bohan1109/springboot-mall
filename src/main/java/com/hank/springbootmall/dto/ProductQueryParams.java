@@ -1,6 +1,6 @@
-package com.hank.springbootmalll.dto;
+package com.hank.springbootmall.dto;
 
-import com.hank.springbootmalll.constant.ProductCategory;
+import com.hank.springbootmall.constant.ProductCategory;
 
 public class ProductQueryParams {
     private String productName;

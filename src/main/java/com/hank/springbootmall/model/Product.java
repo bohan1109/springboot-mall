@@ -1,6 +1,6 @@
-package com.hank.springbootmalll.model;
+package com.hank.springbootmall.model;
 
-import com.hank.springbootmalll.constant.ProductCategory;
+import com.hank.springbootmall.constant.ProductCategory;
 import jakarta.persistence.*;
 import lombok.Data;
 

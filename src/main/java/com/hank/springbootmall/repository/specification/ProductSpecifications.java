@@ -1,8 +1,8 @@
-package com.hank.springbootmalll.repository.specification;
+package com.hank.springbootmall.repository.specification;
 
 
-import com.hank.springbootmalll.dto.ProductQueryParams;
-import com.hank.springbootmalll.model.Product;
+import com.hank.springbootmall.dto.ProductQueryParams;
+import com.hank.springbootmall.model.Product;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;

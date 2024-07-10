@@ -1,10 +1,10 @@
-package com.hank.springbootmalll.controller;
+package com.hank.springbootmall.controller;
 
-import com.hank.springbootmalll.constant.ProductCategory;
-import com.hank.springbootmalll.dto.ProductDto;
-import com.hank.springbootmalll.dto.ProductQueryParams;
-import com.hank.springbootmalll.model.Product;
-import com.hank.springbootmalll.service.ProductService;
+import com.hank.springbootmall.constant.ProductCategory;
+import com.hank.springbootmall.dto.ProductDto;
+import com.hank.springbootmall.dto.ProductQueryParams;
+import com.hank.springbootmall.model.Product;
+import com.hank.springbootmall.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,8 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/products")

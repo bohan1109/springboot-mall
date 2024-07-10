@@ -1,4 +1,4 @@
-package com.hank.springbootmalll.exception;
+package com.hank.springbootmall.exception;
 
 public class ProductException extends RuntimeException {
     public ProductException(String message) {
