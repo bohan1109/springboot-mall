@@ -1,4 +1,4 @@
-package com.hank.springbootmalll.exception;
+package com.hank.springbootmall.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,10 +1,10 @@
-package com.hank.springbootmalll;
+package com.hank.springbootmall;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SpringbootMalllApplicationTests {
+class SpringbootMallApplicationTests {
 
     @Test
     void contextLoads() {
