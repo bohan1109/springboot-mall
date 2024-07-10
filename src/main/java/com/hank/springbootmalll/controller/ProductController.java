@@ -7,6 +7,9 @@ import com.hank.springbootmalll.model.Product;
 import com.hank.springbootmalll.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +24,13 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts(
+    public ResponseEntity<Page<Product>> getAllProducts(
             @RequestParam(required = false) ProductCategory category,
             @RequestParam(required=false) String productName,
             @RequestParam(required = false, defaultValue = "createdDate") String sortBy,
-            @RequestParam(required = false, defaultValue = "asc") String sortDirection
+            @RequestParam(required = false, defaultValue = "asc") String sortDirection,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
         ProductQueryParams productQueryParams = new ProductQueryParams();
         productQueryParams.setCategory(category);
@@ -36,7 +41,8 @@ public class ProductController {
         }
 
         Sort sort = Sort.by(direction, sortBy);
-         List<Product> productList= productService.getAllProducts(productQueryParams,sort);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        Page<Product> productList= productService.getAllProducts(productQueryParams,pageable);
             return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
 

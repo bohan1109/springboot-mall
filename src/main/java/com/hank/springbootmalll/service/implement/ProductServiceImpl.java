@@ -9,6 +9,8 @@ import com.hank.springbootmalll.repository.ProductRepository;
 import com.hank.springbootmalll.repository.specification.ProductSpecifications;
 import com.hank.springbootmalll.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +24,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Override
-    public List<Product> getAllProducts(ProductQueryParams productQueryParams, Sort sort) {
-        return productRepository.findAll(ProductSpecifications.withDynamicQuery(productQueryParams),sort);
+    public Page<Product> getAllProducts(ProductQueryParams productQueryParams, Pageable pageable) {
+        return productRepository.findAll(ProductSpecifications.withDynamicQuery(productQueryParams),pageable);
     }
 
     @Override
