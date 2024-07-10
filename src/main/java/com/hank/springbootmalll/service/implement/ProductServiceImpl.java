@@ -69,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
 //        String categoryStr = productDto.getCategory();
 //        ProductCategory productCategory = ProductCategory.valueOf(categoryStr);
 //        product.setCategory(productCategory);
-        product.setCategory(ProductCategory.valueOf(productDto.getCategory())); // Assuming valid enum value
+        product.setCategory(productDto.getCategory()); // Assuming valid enum value
         product.setImageUrl(productDto.getImageUrl());
         product.setPrice(productDto.getPrice());
         product.setStock(productDto.getStock());

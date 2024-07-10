@@ -1,5 +1,6 @@
 package com.hank.springbootmalll.dto;
 
+import com.hank.springbootmalll.constant.ProductCategory;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -8,7 +9,7 @@ public class ProductDto {
     @NotNull
     private String productName;
     @NotNull
-    private String category;
+    private ProductCategory category;
     @NotNull
     private String imageUrl;
     @NotNull
