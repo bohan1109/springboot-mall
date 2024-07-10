@@ -7,6 +7,7 @@ import com.hank.springbootmalll.model.Product;
 import com.hank.springbootmalll.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +23,20 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts(
             @RequestParam(required = false) ProductCategory category,
-            @RequestParam(required=false) String productName
+            @RequestParam(required=false) String productName,
+            @RequestParam(required = false, defaultValue = "createdDate") String sortBy,
+            @RequestParam(required = false, defaultValue = "asc") String sortDirection
     ) {
         ProductQueryParams productQueryParams = new ProductQueryParams();
         productQueryParams.setCategory(category);
         productQueryParams.setProductName(productName);
-         List<Product> productList= productService.getAllProducts(productQueryParams);
+        Sort.Direction direction = Sort.Direction.ASC;
+        if ("desc".equalsIgnoreCase(sortDirection)) {
+            direction = Sort.Direction.DESC;
+        }
+
+        Sort sort = Sort.by(direction, sortBy);
+         List<Product> productList= productService.getAllProducts(productQueryParams,sort);
             return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
 

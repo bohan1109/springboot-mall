@@ -9,6 +9,7 @@ import com.hank.springbootmalll.repository.ProductRepository;
 import com.hank.springbootmalll.repository.specification.ProductSpecifications;
 import com.hank.springbootmalll.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -21,8 +22,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Override
-    public List<Product> getAllProducts(ProductQueryParams productQueryParams) {
-        return productRepository.findAll(ProductSpecifications.withDynamicQuery(productQueryParams));
+    public List<Product> getAllProducts(ProductQueryParams productQueryParams, Sort sort) {
+        return productRepository.findAll(ProductSpecifications.withDynamicQuery(productQueryParams),sort);
     }
 
     @Override
