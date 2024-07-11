@@ -1,9 +1,8 @@
 package com.hank.springbootmall.controller;
 
-import com.hank.springbootmall.dto.UserDto;
+import com.hank.springbootmall.dto.UserRegisterDto;
 import com.hank.springbootmall.model.User;
 import com.hank.springbootmall.service.UserService;
-import com.mysql.cj.x.protobuf.Mysqlx;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody @Valid UserDto userDto) {
+    public ResponseEntity<User> register(@RequestBody @Valid UserRegisterDto userDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(userDto));
     }
 }
