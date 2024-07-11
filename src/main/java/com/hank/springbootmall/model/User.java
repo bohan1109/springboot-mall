@@ -1,5 +1,6 @@
 package com.hank.springbootmall.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ public class User {
     private Integer userId;
 
     private String email;
+    @JsonIgnore
     private String password;
     private Date createdDate;
     private Date lastModifiedDate;
