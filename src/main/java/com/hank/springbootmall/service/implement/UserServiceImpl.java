@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -27,8 +28,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(UserRegisterDto userRegisterDto) {
-        List<User> userExist = userRepository.findByEmail(userRegisterDto.getEmail());
-        if(!userExist.isEmpty()) {
+        Optional<User> userExist = userRepository.findByEmail(userRegisterDto.getEmail());
+        if(userExist.isPresent()) {
             log.warn("Email {} 已經被註冊", userRegisterDto.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
