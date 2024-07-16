@@ -18,7 +18,8 @@ public class User {
     private String password;
     private Date createdDate;
     private Date lastModifiedDate;
-
+    @Transient
+    private String token;
     public int getUserId() {
         return userId;
     }

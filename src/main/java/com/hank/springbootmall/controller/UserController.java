@@ -1,6 +1,9 @@
 package com.hank.springbootmall.controller;
 
+import com.hank.springbootmall.dto.UserLoginDto;
+import com.hank.springbootmall.dto.UserLoginResponseDto;
 import com.hank.springbootmall.dto.UserRegisterDto;
+import com.hank.springbootmall.dto.UserRegisterResponseDto;
 import com.hank.springbootmall.model.User;
 import com.hank.springbootmall.service.UserService;
 import jakarta.validation.Valid;
@@ -19,7 +22,25 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody @Valid UserRegisterDto userDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(userDto));
+    public ResponseEntity<UserRegisterResponseDto> register(@RequestBody @Valid UserRegisterDto userDto) {
+        User user = userService.register(userDto);
+        UserRegisterResponseDto responseDto = new UserRegisterResponseDto();
+        responseDto.setUserId(user.getUserId());
+        responseDto.setEmail(user.getEmail());
+        responseDto.setCreatedDate(user.getCreatedDate());
+        responseDto.setLastModifiedDate(user.getLastModifiedDate());
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserLoginResponseDto> login(@RequestBody @Valid UserLoginDto userLoginDto) {
+        User user = userService.login(userLoginDto);
+        UserLoginResponseDto responseDto = new UserLoginResponseDto();
+        responseDto.setUserId(user.getUserId());
+        responseDto.setEmail(user.getEmail());
+        responseDto.setCreatedDate(user.getCreatedDate());
+        responseDto.setLastModifiedDate(user.getLastModifiedDate());
+        responseDto.setToken(user.getToken());
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 }

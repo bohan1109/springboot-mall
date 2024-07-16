@@ -1,5 +1,7 @@
 package com.hank.springbootmall.service.implement;
 
+import com.hank.springbootmall.config.JwtUtil;
+import com.hank.springbootmall.dto.UserLoginDto;
 import com.hank.springbootmall.dto.UserRegisterDto;
 import com.hank.springbootmall.model.User;
 import com.hank.springbootmall.repository.UserRepository;
@@ -22,6 +24,9 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     private final static Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -39,5 +44,24 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userRegisterDto.getEmail());
         user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
         return userRepository.save(user);
+    }
+
+    @Override
+    public User login(UserLoginDto userLoginDto) {
+        Optional<User> userExist = userRepository.findByEmail(userLoginDto.getEmail());
+        if(userExist.isEmpty()) {
+            log.warn("此 Email {} 尚未被註冊  ", userLoginDto.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        if(passwordEncoder.matches(userLoginDto.getPassword(), userExist.get().getPassword())){
+            User user = userExist.get();
+            String token = jwtUtil.generateToken(user.getEmail());
+            user.setToken(token);
+            return user;
+        }else{
+            log.warn("密碼錯誤， Email: {}", userLoginDto.getEmail());
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+        }
+
     }
 }
