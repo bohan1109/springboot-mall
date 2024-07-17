@@ -7,4 +7,5 @@ import com.hank.springbootmall.model.User;
 public interface UserService {
     User register(UserRegisterDto userRegisterDto);
     String login(UserLoginDto userLoginDto);
+    String getUserFromToken(String token);
 }

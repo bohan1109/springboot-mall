@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -49,19 +50,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public String login(UserLoginDto userLoginDto) {
         Optional<User> userExist = userRepository.findByEmail(userLoginDto.getEmail());
-        if(userExist.isEmpty()) {
+        if (userExist.isEmpty()) {
             log.warn("此 Email {} 尚未被註冊  ", userLoginDto.getEmail());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email not registered");
         }
-        if(passwordEncoder.matches(userLoginDto.getPassword(), userExist.get().getPassword())){
-            User user = userExist.get();
-            String token = jwtUtil.generateToken(user.getEmail());
-            user.setToken(token);
-            return token;
-        }else{
+        User user = userExist.get();
+        if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
+            return jwtUtil.generateToken(user.getEmail());
+        } else {
             log.warn("密碼錯誤， Email: {}", userLoginDto.getEmail());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
+    }
 
+    @Override
+    public String getUserFromToken(String token) {
+        String email = jwtUtil.extractEmail(token);
+        return email;
     }
 }
