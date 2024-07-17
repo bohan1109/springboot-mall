@@ -34,13 +34,9 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<UserLoginResponseDto> login(@RequestBody @Valid UserLoginDto userLoginDto) {
-        User user = userService.login(userLoginDto);
+        String token = userService.login(userLoginDto);
         UserLoginResponseDto responseDto = new UserLoginResponseDto();
-        responseDto.setUserId(user.getUserId());
-        responseDto.setEmail(user.getEmail());
-        responseDto.setCreatedDate(user.getCreatedDate());
-        responseDto.setLastModifiedDate(user.getLastModifiedDate());
-        responseDto.setToken(user.getToken());
+        responseDto.setToken(token);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 }

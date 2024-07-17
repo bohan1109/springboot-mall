@@ -8,10 +8,7 @@ import java.util.Date;
 @Data
 public class UserLoginResponseDto {
 
-    private Integer userId;
-    private String email;
-    private Date createdDate;
-    private Date lastModifiedDate;
+
     private String token;
 
 

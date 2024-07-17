@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User login(UserLoginDto userLoginDto) {
+    public String login(UserLoginDto userLoginDto) {
         Optional<User> userExist = userRepository.findByEmail(userLoginDto.getEmail());
         if(userExist.isEmpty()) {
             log.warn("此 Email {} 尚未被註冊  ", userLoginDto.getEmail());
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
             User user = userExist.get();
             String token = jwtUtil.generateToken(user.getEmail());
             user.setToken(token);
-            return user;
+            return token;
         }else{
             log.warn("密碼錯誤， Email: {}", userLoginDto.getEmail());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
