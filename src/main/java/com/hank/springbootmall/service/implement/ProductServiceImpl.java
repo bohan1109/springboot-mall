@@ -2,7 +2,6 @@ package com.hank.springbootmall.service.implement;
 
 import com.hank.springbootmall.dto.ProductDto;
 import com.hank.springbootmall.dto.ProductQueryParams;
-import com.hank.springbootmall.exception.ProductNotFoundException;
 import com.hank.springbootmall.model.Product;
 import com.hank.springbootmall.repository.ProductRepository;
 import com.hank.springbootmall.repository.specification.ProductSpecifications;
@@ -11,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import java.util.Date;
 
@@ -22,13 +23,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<Product> getAllProducts(ProductQueryParams productQueryParams, Pageable pageable) {
-        return productRepository.findAll(ProductSpecifications.withDynamicQuery(productQueryParams),pageable);
+        return productRepository.findAll(ProductSpecifications.withDynamicQuery(productQueryParams), pageable);
     }
 
     @Override
     public Product getProductById(long id) {
         return productRepository.findById(id)
-                .orElseThrow(()->new ProductNotFoundException("Product not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + id));
     }
 
     @Override
@@ -43,30 +44,24 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product updateProduct(Long id, ProductDto productDto) {
         Product product = productRepository.findById(id)
-                .orElseThrow(()->new ProductNotFoundException("Product not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + id));
 
-        if (product != null) {
-            updateEntityFromDto(product, productDto);
-            product.setLastModifiedDate(new Date());
-            return productRepository.save(product);
-        }
-        return null;
+        updateEntityFromDto(product, productDto);
+        product.setLastModifiedDate(new Date());
+        return productRepository.save(product);
     }
 
     @Override
     public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new ProductNotFoundException("Product not found with id: " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + id);
         }
         productRepository.deleteById(id);
     }
 
     private void updateEntityFromDto(Product product, ProductDto productDto) {
         product.setProductName(productDto.getProductName());
-//        String categoryStr = productDto.getCategory();
-//        ProductCategory productCategory = ProductCategory.valueOf(categoryStr);
-//        product.setCategory(productCategory);
-        product.setCategory(productDto.getCategory()); // Assuming valid enum value
+        product.setCategory(productDto.getCategory());
         product.setImageUrl(productDto.getImageUrl());
         product.setPrice(productDto.getPrice());
         product.setStock(productDto.getStock());

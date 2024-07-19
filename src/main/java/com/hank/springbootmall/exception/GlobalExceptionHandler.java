@@ -12,10 +12,6 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<String> handleProductNotFoundException(ProductNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
@@ -26,7 +22,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleResponseStatusException(ResponseStatusException ex) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", ex.getReason());
-        errorResponse.put("status", ex.getStatusCode().toString());
         return ResponseEntity.status(ex.getStatusCode()).body(errorResponse);
     }
 
