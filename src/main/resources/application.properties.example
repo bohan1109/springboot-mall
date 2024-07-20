@@ -7,3 +7,4 @@ spring.jackson.time-zone=GMT+8
 spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
 spring.jpa.show-sql=true
 spring.jpa.hibernate.ddl-auto=update
+jwt.secret=secret
