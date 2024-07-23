@@ -1,6 +1,7 @@
 package com.hank.springbootmall.service.implement;
 
 import com.hank.springbootmall.config.JwtUtil;
+import com.hank.springbootmall.dto.BasicResponseDto;
 import com.hank.springbootmall.dto.UserLoginDto;
 import com.hank.springbootmall.dto.UserRegisterDto;
 import com.hank.springbootmall.model.User;
@@ -54,7 +55,12 @@ public class UserServiceImpl implements UserService {
         }
         User user = userExist.get();
         if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
-            return jwtUtil.generateToken(user.getEmail());
+            CustomUserDetailsImpl userDetails = new CustomUserDetailsImpl(
+                    user.getUserId(),
+                    user.getEmail(),
+                    user.getPassword()
+            );
+            return jwtUtil.generateToken(userDetails);
         } else {
             log.warn("密碼錯誤， Email: {}", userLoginDto.getEmail());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
@@ -62,8 +68,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getUserFromToken(String token) {
-        String email = jwtUtil.extractEmail(token);
-        return email;
+    public BasicResponseDto getUserFromToken(String token) {
+        BasicResponseDto basicResponseDto = new BasicResponseDto();
+        basicResponseDto.setUserId(jwtUtil.extractUserId(token));
+        basicResponseDto.setEmail(jwtUtil.extractEmail(token));
+        return basicResponseDto;
     }
 }
