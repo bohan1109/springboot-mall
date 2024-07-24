@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
@@ -33,5 +35,16 @@ public class OrderController {
         BasicResponseDto userInfo = userService.getUserFromToken(token);
         Integer userId = userInfo.getUserId();
         return ResponseEntity.status(HttpStatus.CREATED).body(orderService.CreateOrder(userId,createOrderDto));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Order>> getOrders(@RequestHeader("Authorization") String token) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        BasicResponseDto userInfo = userService.getUserFromToken(token);
+        Integer userId = userInfo.getUserId();
+        List<Order> orders = orderService.getOrdersByUserId(userId);
+        return ResponseEntity.ok(orders);
     }
 }
