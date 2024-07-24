@@ -2,12 +2,15 @@ package com.hank.springbootmall.config;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.hank.springbootmall.repository.UserRepository;
+import com.hank.springbootmall.service.implement.CustomUserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
@@ -28,6 +31,9 @@ public class JwtGenericFilter extends GenericFilterBean {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     public JwtGenericFilter(@Lazy UserDetailsService userDetailsService) {
@@ -56,14 +62,25 @@ public class JwtGenericFilter extends GenericFilterBean {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            try {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            if (jwtUtil.validateToken(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken
-                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                if (jwtUtil.validateToken(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    usernamePasswordAuthenticationToken
+                            .setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                } else {
+                    httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
+                    return;
+                }
+            } catch (UsernameNotFoundException e) {
+                logger.warn("User not found: " + e.getMessage());
+                httpResponse.setContentType("application/json");
+                httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                httpResponse.getWriter().write("{\"error\": \"User not found: " + e.getMessage() + "\"}");
+                return;
             }
         }
         chain.doFilter(request, response);

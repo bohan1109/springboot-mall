@@ -16,6 +16,8 @@ public class CustomUserDetailsImpl implements UserDetails {
     private String email;
     private String password;
 
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
