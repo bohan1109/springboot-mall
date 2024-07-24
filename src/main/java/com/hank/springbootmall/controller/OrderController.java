@@ -1,8 +1,10 @@
 package com.hank.springbootmall.controller;
 
+import com.hank.springbootmall.dto.BasicResponseDto;
 import com.hank.springbootmall.dto.CreateOrderDto;
 import com.hank.springbootmall.model.Order;
 import com.hank.springbootmall.service.OrderService;
+import com.hank.springbootmall.service.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,15 +14,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/orders")
 public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private UserService userService;
+
     private final static Logger log = LoggerFactory.getLogger(OrderController.class);
 
-    @PostMapping("/{userId}/orders")
-    public ResponseEntity<Order> createOrder(@PathVariable Integer userId, @RequestBody @Valid CreateOrderDto createOrderDto) {
+    @PostMapping
+    public ResponseEntity<Order> createOrder(@RequestHeader("Authorization") String token,
+                                             @RequestBody @Valid CreateOrderDto createOrderDto) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        BasicResponseDto userInfo = userService.getUserFromToken(token);
+        Integer userId = userInfo.getUserId();
         return ResponseEntity.status(HttpStatus.CREATED).body(orderService.CreateOrder(userId,createOrderDto));
     }
 }
