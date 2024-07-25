@@ -14,6 +14,8 @@ import com.hank.springbootmall.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -89,7 +91,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getOrdersByUserId(Integer userId) {
-        return orderRepository.findByUserId(userId);
+    public Page<Order> getOrdersByUserId(Integer userId, Pageable pageable) {
+        return orderRepository.findByUserId(userId, pageable);
     }
 }

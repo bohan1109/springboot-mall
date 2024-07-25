@@ -9,6 +9,10 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,13 +42,19 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Order>> getOrders(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<Page<Order>> getOrders(@RequestHeader("Authorization") String token,
+                                                 @RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "5") int size,
+                                                 @RequestParam(defaultValue = "createdDate") String sortBy,
+                                                 @RequestParam(defaultValue = "desc") String sortDirection) {
         if (token.startsWith("Bearer ")) {
             token = token.substring(7);
         }
         BasicResponseDto userInfo = userService.getUserFromToken(token);
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
         Integer userId = userInfo.getUserId();
-        List<Order> orders = orderService.getOrdersByUserId(userId);
+        Page<Order> orders = orderService.getOrdersByUserId(userId,pageable);
         return ResponseEntity.ok(orders);
     }
 }
