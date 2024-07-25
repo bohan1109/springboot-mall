@@ -48,10 +48,21 @@ public class OrderServiceImpl implements OrderService {
         int totalAmount = 0;
         List<OrderItem> orderItemList = new ArrayList<>();
         for(BuyItem buyItem: createOrderDto.getBuyItemList()){
-            Optional<Product> product = productRepository.findByProductId(buyItem.getProductId());
-            if(product.isPresent()){
+            Optional<Product> productOpt = productRepository.findByProductId(buyItem.getProductId());
+            if(productOpt.isEmpty()){
+                log.warn("商品 {} 不存在", buyItem.getProductId());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"商品不存在");
+            }
+            Product product = productOpt.get();
+            if (product.getStock()<buyItem.getQuantity()) {
+                String errorMessage = String.format("%s 商品庫存不足", product.getProductName());
+                log.warn("商品 {} 庫存不足", product.getProductName());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMessage);
+            }else{
+                product.setStock(product.getStock() - buyItem.getQuantity());
+                productRepository.save(product);
                 //計算總價
-                int amount = buyItem.getQuantity()*product.get().getPrice();
+                int amount = buyItem.getQuantity()*product.getPrice();
                 totalAmount += amount;
                 //轉換buyItem to OrderItem
                 OrderItem orderItem = new OrderItem();
