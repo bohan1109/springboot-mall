@@ -39,9 +39,7 @@ public class UserController {
         if (token.startsWith("Bearer ")) {
             token = token.substring(7);
         }
-        String email = userService.getUserFromToken(token);
-        BasicResponseDto responseDto = new BasicResponseDto();
-        responseDto.setEmail(email);
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+        BasicResponseDto userInfo = userService.getUserFromToken(token);
+        return ResponseEntity.status(HttpStatus.OK).body(userInfo);
     }
 }
